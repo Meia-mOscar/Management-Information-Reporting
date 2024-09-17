@@ -106,11 +106,22 @@ function clearBrands() {
   
   //sheet.deleteRows(startingFrom,upUntil-startingFrom);
   //The range, starting -> from up until must be retained. Thus, if
-  if(startingFrom<=1) {
+  /*if(startingFrom<=1) {
     sheet.getRange(1,startingFrom,startingFrom-2).clearContent();
   } else {
     sheet
-  }
+  }*/
+}
+
+function binarySearch() {
+  setIndex();
+  let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('AppScript');
+  var first_element = 1;
+  var last_element = sheet.getLastRow();
+  var range = last_element - first_element;
+
+  var current_element = sheet.getRange(range/2, index.get('All Brands'));
+
 }
 
 /**
