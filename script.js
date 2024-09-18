@@ -119,8 +119,37 @@ function binarySearch() {
   var first_element = 1;
   var last_element = sheet.getLastRow();
   var range = last_element - first_element;
+  var current_element = -1;
+  var first_appearance = -1;
+  var last_appearance = -1;
 
-  var current_element = sheet.getRange(range/2, index.get('All Brands'));
+  while(first_appearance<0 && last_appearance<0) {
+
+  }
+
+  current_element = sheet.getRange(range/2, index.get('All Brands')).getValue();
+  if(current_element == 'Direct Line') {
+    if(sheet.getRange(range/2-1, index.get('All Brands')) == 'Direct Line') {
+      last_element = sheet.getRange(range/2-1, index.get('All Brands')).getRow();
+      range = last_element - first_element;
+    } else {
+      first_appearance = sheet.getRange(range/2, index.get('All Brands'));
+    }
+  } else {
+    //This element was not DL. Check whether we have under or over shot.
+    if(current_element.localeCompare('Direct Line')) {
+      //True if current_element(z) vs 'DL'
+      if(sheet.getRange(range/2-1, index.get('All Brands')) == 'Direct Line') {
+        last_appearance = sheet.getRange(range/2-1,index.get('All Brands')).getRow(); //Verify this row
+      } else {
+        last_element = sheet.getRange(range/2-1,index.get('All Brands')).getRow();
+        range = last_element - first_element;
+      }
+    } else {
+      //False if current_element(a) vs 'DL'
+      //Then continue here
+    }
+  }
 
 }
 
