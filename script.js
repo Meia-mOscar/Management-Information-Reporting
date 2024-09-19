@@ -124,32 +124,51 @@ function binarySearch() {
   var last_appearance = -1;
 
   while(first_appearance<0 && last_appearance<0) {
+    current_element = sheet.getRange(range/2, index.get('All Brands')).getValue();
+    Logger.log('current_element '+ current_element+ ' at '+sheet.getRange(range/2, index.get('All Brands')).getA1Notation());
 
-  }
-
-  current_element = sheet.getRange(range/2, index.get('All Brands')).getValue();
-  if(current_element == 'Direct Line') {
-    if(sheet.getRange(range/2-1, index.get('All Brands')) == 'Direct Line') {
-      last_element = sheet.getRange(range/2-1, index.get('All Brands')).getRow();
-      range = last_element - first_element;
-    } else {
-      first_appearance = sheet.getRange(range/2, index.get('All Brands'));
-    }
-  } else {
-    //This element was not DL. Check whether we have under or over shot.
-    if(current_element.localeCompare('Direct Line')) {
-      //True if current_element(z) vs 'DL'
-      if(sheet.getRange(range/2-1, index.get('All Brands')) == 'Direct Line') {
-        last_appearance = sheet.getRange(range/2-1,index.get('All Brands')).getRow(); //Verify this row
-      } else {
-        last_element = sheet.getRange(range/2-1,index.get('All Brands')).getRow();
+    if(current_element == 'Direct Line') {
+      if(sheet.getRange(range/2-1, index.get('All Brands')).getValue() == 'Direct Line') {
+        last_element = sheet.getRange(range/2-1, index.get('All Brands')).getRow();
         range = last_element - first_element;
+        Logger.log('1,1');
+      } else {
+        first_appearance = sheet.getRange(range/2, index.get('All Brands')).getRow();
+        Logger.log('1,0');
       }
     } else {
-      //False if current_element(a) vs 'DL'
-      //Then continue here
+      //This element was not DL. Check whether we have under or over shot.
+      if(current_element.localeCompare('Direct Line')) {
+        //True if current_element(z) vs 'DL'
+        if(sheet.getRange(range/2-1, index.get('All Brands')).getValue() == 'Direct Line') {
+          last_appearance = sheet.getRange(range/2-1,index.get('All Brands')).getRow();
+          Logger.log('0, 1, 1');
+        } else {
+          last_element = sheet.getRange(range/2-1,index.get('All Brands')).getRow();
+          range = last_element - first_element;
+          Logger.log('0, 1, 0');
+        }
+      } else {
+        //False if current_element(a) vs 'DL'
+        if(sheet.getRange(range/2+1, index.get('All Brands')).getValue() == 'Direct Line') {
+          first_appearance = sheet.getRange(range/2+1, index);
+          Logger.log('0, 0, 1');
+        } else {
+          //Update first element
+          first_element = sheet.getRange(range/2+1,index.get('All Brands')).getRow();
+          range = last_element - first_element;
+          Logger.log('0, 0, 0');
+        }
+      }
     }
+    /**
+     * The problem I am experiencing is that once I've located the desired brand, and work in one direction, I overshoot and then I am fucked. 
+     * How to make sure my last_element is never updated out of the range of the desired brand?
+     * Dont update the index if it is no longer a match thereof?
+     */
   }
+
+  
 
 }
 
